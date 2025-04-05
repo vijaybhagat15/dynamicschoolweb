@@ -1,6 +1,7 @@
 // src/redux/slices/section1Slice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import { BASE_URL } from "../url";
 
 interface Slide {
   image: string;
@@ -24,7 +25,7 @@ export const fetchSection1Slides = createAsyncThunk(
   "section1/fetchSlides",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:8000/section1");
+      const response = await axios.get(`${BASE_URL}/section1`);
       return response.data.slides;
     } catch (error) {
       const err = error as AxiosError;

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import { BASE_URL } from "../url";
 
 // Define the types
 interface School {
@@ -31,7 +32,7 @@ export const fetchSchoolData = createAsyncThunk(
   "school/fetchSchoolData",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:8000/school");
+      const response = await axios.get(`${BASE_URL}/school`);
       return response.data.schoolsData;
     } catch (error) {
       const axiosError = error as AxiosError;

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import { BASE_URL } from "../url";
 
 // Define types
 interface Campus {
@@ -46,7 +47,7 @@ const initialState: FooterState = {
 // Async thunk to fetch footer data
 export const fetchFooter = createAsyncThunk("footer/fetchFooter", async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.get("http://localhost:8000/footer");
+    const response = await axios.get(`${BASE_URL}/footer`);
     return response.data.footerData;
   } catch (error) {
     const err = error as AxiosError;

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AxiosError } from "axios";
+import { BASE_URL } from "../url";
 
 // Define the type for header data
 interface HeaderState {
@@ -21,7 +22,7 @@ const initialState: HeaderState = {
 // Async thunk to fetch header data
 export const fetchHeader = createAsyncThunk("header/fetchHeader", async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:8000/header");
+      const response = await axios.get(`${BASE_URL}/header`);
       return response.data.header;
     } catch (error) {
       const err = error as AxiosError; // Explicitly cast the error

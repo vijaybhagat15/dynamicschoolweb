@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import { BASE_URL } from "../url";
 
 export interface NewsItem {
   _id: string;
@@ -28,7 +29,7 @@ export const fetchSection6Data = createAsyncThunk(
   "section6/fetchSection6Data",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:8000/section6");
+      const response = await axios.get(`${BASE_URL}/section6`);
       return response.data.newsData;
     } catch (error) {
       const axiosError = error as AxiosError;

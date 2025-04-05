@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { BASE_URL } from "../url";
 
 // Define the data structure for each section
 interface Section {
@@ -32,7 +33,7 @@ export const fetchSection2 = createAsyncThunk(
     "section2/fetchSection2",
     async (_, { rejectWithValue }) => {
       try {
-        const response = await axios.get("http://localhost:8000/section2");
+        const response = await axios.get(`${BASE_URL}/section2`);
         return response.data.sections; // Extract the sections object from response
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import { BASE_URL } from "../url";
 interface FacultyMember {
   id: number;
   image: string;
@@ -30,7 +30,7 @@ const initialState: AboutState = {
 
 // Async thunk to fetch data
 export const fetchAboutData = createAsyncThunk("about/fetchData", async () => {
-  const response = await axios.get("http://localhost:8000/about");
+  const response = await axios.get(`${BASE_URL}/about`);
   return response.data; // Ensure the API response structure matches AboutState
 });
 

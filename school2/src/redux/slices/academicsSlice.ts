@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import { BASE_URL } from "../url";
 
 // Define interfaces for each piece of data
 interface HeaderImage {
@@ -37,7 +38,7 @@ export const fetchAcademicsData = createAsyncThunk(
   "academics/fetchAcademicsData",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:8000/academics");
+      const response = await axios.get(`${BASE_URL}/academics`);
       return response.data.academicsData;
     } catch (error) {
       const axiosError = error as AxiosError;

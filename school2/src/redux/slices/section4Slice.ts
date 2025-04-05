@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import { BASE_URL } from "../url";
 
 // Define the interface for Section4 data
 interface Section4State {
@@ -28,7 +29,7 @@ export const fetchSection4Data = createAsyncThunk<
   { rejectValue: string } // Error handling
 >("section4/fetchSection4Data", async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.get("http://localhost:8000/section4");
+    const response = await axios.get(`${BASE_URL}/section4`);
     return response.data.sections; // Extract `sections` from response
   } catch (error) {
     const axiosError = error as AxiosError;
