@@ -51,7 +51,7 @@ const Section4 = () => {
             {sections?.p1} {/* Ensure data exists before accessing */}
           </p>
           <div className="items-center justify-center flex">
-            <button className="border border-teal-600 text-teal-600 px-4 py-2 rounded hover:bg-teal-600 hover:text-white transition w-36 mx-auto">
+            <button className="border border-teal-600  px-4 py-2 rounded bg-button transition w-36 mx-auto">
               LEARN MORE
             </button>
           </div>

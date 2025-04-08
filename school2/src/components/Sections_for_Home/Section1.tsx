@@ -62,7 +62,7 @@ const Carousel = () => {
       <p className="mt-6 text-xl md:text-xl font-medium leading-relaxed">
         {slides[index].description}
       </p>
-      <button className="mt-8 bg-teal-700 hover:bg-teal-900 text-white font-semibold px-4 py-2 rounded-xl text-sm shadow-md transition-transform transform hover:scale-105">
+      <button className="mt-8 bg-button font-semibold px-4 py-2 rounded-xl text-sm shadow-md transition-transform transform hover:scale-105">
         Learn More
       </button>
     </div>

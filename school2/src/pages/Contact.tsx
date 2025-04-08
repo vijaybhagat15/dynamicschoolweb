@@ -144,7 +144,7 @@ export default function Contact() {
 
               <button
                 type="submit"
-                className="w-full py-3 text-white rounded-lg bg-gradient-to-r from-teal-300 to-teal-900 hover:opacity-80 transition-all duration-500 flex items-center justify-center"
+                className="w-full py-3  rounded-lg bg-gradient-to-r bg-button hover:opacity-80 transition-all duration-500 flex items-center justify-center"
               >
                 <FaPaperPlane className="mr-2" />
                 <div>{contactData.form.button}</div>

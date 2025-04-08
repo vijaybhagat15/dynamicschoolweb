@@ -42,7 +42,7 @@ const Section5 = () => {
           {values.map((value, index) => (
             <motion.div
               key={index}
-              className="w-64 p-6 text-center shadow-lg rounded-xl bg-teal-100"
+              className="w-64 p-6 text-center shadow-lg rounded-xl bg-secondary"
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.2 }}

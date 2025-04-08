@@ -30,7 +30,7 @@ const Academics = () => {
 
       {/* Info Section */}
       <div className="py-12 px-6 max-w-4xl mx-auto text-center">
-        <div className="bg-green-50 p-4 rounded-md shadow-md">
+        <div className="bg-secondary p-4 rounded-md shadow-md">
           <p className="text-secondary font-semibold">{academicsData.introText}</p>
         </div>
       </div>

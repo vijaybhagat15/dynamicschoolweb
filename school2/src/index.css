@@ -10,4 +10,21 @@
   .text-secondary {
     @apply text-teal-700 text-lg;
   }
+
+  .bg-primary {
+    @apply bg-white;
+  }
+
+  .bg-secondary {
+    @apply bg-teal-100;
+  }
+  .bg-secondary {
+    @apply bg-teal-100;
+  }
+  .bg-button {
+    @apply bg-teal-700 hover:bg-teal-900 text-white;
+  }
+  .bg-footer {
+    @apply bg-teal-900;
+  }
 }

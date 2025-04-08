@@ -31,10 +31,10 @@ const Section2 = () => {
       {sections && (
         <>
           {[
-            { key: 1, icon: <FaSchool className="text-teal-500 w-12 h-12" />, section: sections.Visit },
-            { key: 2, icon: <FaUsers className="text-teal-500 w-12 h-12" />, section: sections.Learn },
-            { key: 3, icon: <FaFileAlt className="text-teal-500 w-12 h-12" />, section: sections.Apply },
-            { key: 4, icon: <FaDonate className="text-teal-500 w-12 h-12" />, section: sections.Giving },
+            { key: 1, icon: <FaSchool className="text-secondary w-12 h-12" />, section: sections.Visit },
+            { key: 2, icon: <FaUsers className="text-secondary w-12 h-12" />, section: sections.Learn },
+            { key: 3, icon: <FaFileAlt className="text-secondary w-12 h-12" />, section: sections.Apply },
+            { key: 4, icon: <FaDonate className="text-secondary w-12 h-12" />, section: sections.Giving },
           ].map(({ key, icon, section }, index) => (
             <motion.div
               key={key}
@@ -45,7 +45,7 @@ const Section2 = () => {
               animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.8 }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
             >
-              <div className="text-teal-500 w-12 h-12">{icon}</div>
+              <div className="text-secondary w-12 h-12">{icon}</div>
               <h3 className="text-lg font-semibold">{section?.title}</h3>
               {hovered === key && (
                 <div className="absolute top-20 left-1/2 transform -translate-x-1/2 w-full shadow-lg pb-1 bg-teal-100">
