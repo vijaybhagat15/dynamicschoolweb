@@ -25,7 +25,7 @@ const Section2 = () => {
   return (
     <section
       ref={ref}
-      className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-10 pb-10 px-6 md:px-20 text-secondary border-gray-200 border-b-2"
+      className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-10 pb-10 px-6 md:px-20 text-secondary border-primary"
     >
       {/* Section Items */}
       {sections && (
@@ -52,7 +52,7 @@ const Section2 = () => {
                   <p className="px-2">{section?.description}</p>
                   <a
                     href="#" // TODO: Replace with real links
-                    className="inline-block border border-teal-500 px-4 py-1 rounded-lg hover:bg-teal-500 hover:text-white transition-all text-base"
+                    className="inline-block border border-secondary px-4 py-1 rounded-lg hover:bg-teal-500 hover:text-white transition-all text-base"
                   >
                     {section?.buttonText}
                   </a>

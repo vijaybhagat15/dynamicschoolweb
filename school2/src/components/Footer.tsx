@@ -37,7 +37,7 @@ const Footer = () => {
   if (error) return <p className="text-center py-4 text-red-500">Error: {error}</p>;
 
   return (
-    <footer className="bg-footer text-white py-12 px-6 md:px-20 border-t-4 border-teal-700">
+    <footer className="bg-footer text-white py-12 px-6 md:px-20 ">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Campus Sections */}
         {campuses.map((campus, idx) => (
