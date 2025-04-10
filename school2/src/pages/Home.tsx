@@ -4,7 +4,6 @@ import Section3 from "../components/Sections_for_Home/Section3";
 import Section4 from "../components/Sections_for_Home/Section4";
 import Section5 from "../components/Sections_for_Home/Section5";
 import Section6 from "../components/Sections_for_Home/Section6";
-
 const Home: React.FC = () => {
   return (
     <div>

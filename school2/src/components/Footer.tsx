@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store"; // Adjust path if needed
 import { fetchFooter } from "../redux/slices/footerSlice";
+import { fetchStyleData } from "../redux/slices/styleSlice";
 
 // Icon mapping for social platforms
 const iconMap: Record<string, React.ReactNode> = {
@@ -31,18 +32,24 @@ const Footer = () => {
 
   useEffect(() => {
     dispatch(fetchFooter());
+    dispatch(fetchStyleData());
   }, [dispatch]);
+  const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
 
   if (loading) return <p className="text-center py-4">Loading footer...</p>;
   if (error) return <p className="text-center py-4 text-red-500">Error: {error}</p>;
-
+  if (styleLoading)
+    return <p className="text-center text-gray-500">Style Loading...</p>;
+  if (styleError)
+    return <p className="text-center text-red-500">Style Error: {styleError}</p>;
+  
   return (
-    <footer className="bg-footer text-white py-12 px-6 md:px-20 ">
+    <footer className={`${styles["bg-footer"]} text-white py-12 px-6 md:px-20`}>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Campus Sections */}
         {campuses.map((campus, idx) => (
           <div className="space-y-2" key={idx}>
-            <h3 className="text-lg font-semibold border-b-2 pb-1 border-teal-600">{campus.title}</h3>
+            <h3 className="text-lg font-semibold pb-1 underline ">{campus.title}</h3>
             <p className="text-sm text-gray-300">{campus.subtitle}</p>
             <p className="mt-2">{campus.addressLine1}</p>
             <p>{campus.addressLine2}</p>
@@ -52,7 +59,7 @@ const Footer = () => {
 
         {/* Affiliated Programs */}
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold border-b-2 pb-1 border-teal-600">AFFILIATED PROGRAMS</h3>
+          <h3 className="text-lg font-semibold underline pb-1 ">AFFILIATED PROGRAMS</h3>
           <ul className="mt-2 space-y-2 text-blue-400">
             {affiliatedPrograms.map((program, idx) => (
               <li key={idx}>
@@ -64,7 +71,7 @@ const Footer = () => {
 
         {/* Social Media */}
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold border-b-2 pb-1 border-teal-600">ACCREDITATION & MEMBERSHIPS</h3>
+          <h3 className="text-lg font-semibold underline pb-1 ">ACCREDITATION & MEMBERSHIPS</h3>
 
           <h3 className="mt-6 text-lg font-semibold">Like. Follow. Friend.</h3>
           <p className="text-gray-300">@crestviewacademy</p>

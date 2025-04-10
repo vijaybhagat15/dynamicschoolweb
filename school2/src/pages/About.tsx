@@ -3,28 +3,37 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import { fetchAboutData } from "../redux/slices/AboutSlice"; // Import the async thunk
+import { fetchAboutData } from "../redux/slices/AboutSlice";
+import { fetchStyleData } from "../redux/slices/styleSlice";
 
 const About = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  // Fetch data when the component mounts
   useEffect(() => {
+    dispatch(fetchStyleData());
     dispatch(fetchAboutData());
   }, [dispatch]);
 
-  const facultyMembers = useSelector((state: RootState) => state.about.facultyMembers);
-  const text = useSelector((state: RootState) => state.about.text);
-  const loading = useSelector((state: RootState) => state.about.loading);
-  const error = useSelector((state: RootState) => state.about.error);
+  const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
+
+  const {
+    facultyMembers,
+    text,
+    loading: aboutLoading,
+    error: aboutError,
+  } = useSelector((state: RootState) => state.about);
 
   const [ref, inView] = useInView({ triggerOnce: false, threshold: 0.1 });
 
-  if (loading) return <p className="text-center text-gray-500">Loading...</p>;
-  if (error) return <p className="text-center text-red-500">Error: {error}</p>;
+  if (styleLoading || aboutLoading)
+    return <p className="text-center text-gray-500">Loading...</p>;
+  if (styleError)
+    return <p className="text-center text-red-500">Style Error: {styleError}</p>;
+  if (aboutError)
+    return <p className="text-center text-red-500">About Error: {aboutError}</p>;
 
   return (
-    <div className="border-y-2 border-white text-secondary">
+    <div className={`border-y-2 border-white ${styles["text-secondary"]}`}>
       <div className="container mx-auto px-6 py-16 font-sans">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Right Column: Text Content */}
@@ -33,11 +42,11 @@ const About = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-primary font-serif">Our Journey</h2>
-            <p className="mt-6 text-center md:text-left text-secondary leading-relaxed">
+            <h2 className={`${styles["text-primary"]}`}>Our Journey</h2>
+            <p className={`mt-6 text-center md:text-left ${styles["text-secondary"]} leading-relaxed`}>
               {text?.Journey1 || "Loading..."}
             </p>
-            <p className="mt-4 text-center md:text-left text-secondary leading-relaxed">
+            <p className={`mt-4 text-center md:text-left ${styles["text-secondary"]} leading-relaxed`}>
               {text?.Journey2 || "Loading..."}
             </p>
           </motion.div>
@@ -65,8 +74,8 @@ const About = () => {
           transition={{ duration: 0.8 }}
           className="mt-16 text-center"
         >
-          <h2 className="text-primary font-serif">Our Mission</h2>
-          <p className="mt-6 text-secondary leading-relaxed max-w-3xl mx-auto">
+          <h2 className={`${styles["text-primary"]}`}>Our Mission</h2>
+          <p className={`mt-6 ${styles["text-secondary"]} leading-relaxed max-w-3xl mx-auto`}>
             {text?.Mission || "Loading..."}
           </p>
         </motion.div>
@@ -74,7 +83,7 @@ const About = () => {
         {/* Faculty Section */}
         <div className="mt-16">
           <div className="container mx-auto text-center">
-            <h2 className="text-primary mb-8 font-serif">Meet Our Faculty</h2>
+            <h2 className={`${styles["text-primary"]} mb-8`}>Meet Our Faculty</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
               {facultyMembers?.length > 0 ? (
                 facultyMembers.map((member, index) => (
@@ -90,8 +99,12 @@ const About = () => {
                       alt={member.name}
                       className="w-full h-64 object-cover rounded-md mb-4 border-2 border-teal-500"
                     />
-                    <h3 className="mb-2 text-primary font-serif">{member.name}</h3>
-                    <p className="font-sans text-secondary">{member.subject}</p>
+                    <h3 className={`mb-2 ${styles["text-primary"]}`}>
+                      {member.name}
+                    </h3>
+                    <p className={`font-sans ${styles["text-secondary"]}`}>
+                      {member.subject}
+                    </p>
                   </motion.div>
                 ))
               ) : (

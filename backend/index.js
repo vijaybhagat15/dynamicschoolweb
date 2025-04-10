@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import homeRoute from "./routes/homeRoute.js"; // Import the route
+import stylesRoute from "./routes/styles.js"; // Import the route
 import aboutRoute from "./routes/aboutRoute.js";
 import academicsRoute from "./routes/academics.js";
 import contactRoute from "./routes/contact.js";
@@ -18,7 +18,7 @@ const app = express();
 const port = 8000;
 
 app.use(cors());
-app.use("/", homeRoute); // Use the route
+app.use("/", stylesRoute); // Use the route
 app.use("/", aboutRoute);
 app.use("/", academicsRoute);
 app.use("/", contactRoute);

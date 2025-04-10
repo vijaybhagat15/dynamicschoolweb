@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSection4Data } from "../../redux/slices/section4Slice";
 import { fetchHeader } from "../../redux/slices/headerSlice"; 
+import { fetchStyleData } from "../../redux/slices/styleSlice";
 
 import { AppDispatch, RootState } from "../../redux/store";
 
@@ -17,24 +18,26 @@ const Section4 = () => {
   // Fetch data on component mount
   useEffect(() => {
     dispatch(fetchSection4Data());
+    dispatch(fetchStyleData());
+    dispatch(fetchHeader());
   }, [dispatch]);
-  // Fetch data when component mounts
-    useEffect(() => {
-      dispatch(fetchHeader());
-    }, [dispatch]);
+  const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
 
   // Handle loading state
   if (loading) {
     return <div className="text-center py-10">Loading section...</div>;
   }
-
   // Handle error state
   if (error) {
     return <div className="text-center py-10 text-red-500">Error: {error}</div>;
   }
-
+  if (styleLoading)
+    return <p className="text-center text-gray-500">Style Loading...</p>;
+  if (styleError)
+    return <p className="text-center text-red-500">Style Error: {styleError}</p>;
+  
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center p-8 border-gray-200 border-b-2" ref={ref}>
+    <section className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center p-8 ${styles["border-primary"]}`}  ref={ref}>
       {/* Left Column */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
@@ -43,15 +46,15 @@ const Section4 = () => {
         className="text-center md:text-left"
       >
         <div className="flex justify-center lg:justify-start mb-4">
-          <img src={logo} alt="10 Years Celebration" className="w-36" />
+          <img src={logo|| `logo`} alt="10 Years Celebration" className="w-36" />
         </div>
         <div className="justify-center">
-          <h2 className="text-2xl mb-4 text-primary w-64 mx-auto lg:mx-0">At {name}</h2>
-          <p className="text-secondary mb-6">
+          <h2 className={`text-2xl mb-4 ${styles["text-primary"]} w-64 mx-auto lg:mx-0`} >At {name}</h2>
+          <p className={`${styles["text-secondary"]} mb-6`}>
             {sections?.p1} {/* Ensure data exists before accessing */}
           </p>
           <div className="items-center justify-center flex">
-            <button className="border border-teal-600  px-4 py-2 rounded bg-button transition w-36 mx-auto">
+            <button className={`${styles["border-secondary"]} ${styles["bg-button"]} px-4 py-2 rounded transition w-36 mx-auto`}>
               LEARN MORE
             </button>
           </div>

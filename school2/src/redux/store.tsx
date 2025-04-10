@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import styleReducer from "./slices/styleSlice";
 import AboutReducer from "./slices/AboutSlice";
 import academicsReducer from "./slices/academicsSlice";
 import contactReducer from "./slices/contactSlice";
@@ -14,6 +15,7 @@ import footerReducer from "./slices/footerSlice";
 
 export const store = configureStore({
   reducer: {
+    style: styleReducer,
     about: AboutReducer,
     academics: academicsReducer,
     contact: contactReducer,

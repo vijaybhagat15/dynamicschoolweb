@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSection3Data } from "../../redux/slices/section3Slice";
 import { RootState, AppDispatch } from "../../redux/store";
+import { fetchStyleData } from "../../redux/slices/styleSlice";
 
 const Section3 = () => {
   const { ref, inView: isInView } = useInView({ triggerOnce: false, threshold: 0.2 });
@@ -16,18 +17,24 @@ const Section3 = () => {
 
   useEffect(() => {
     dispatch(fetchSection3Data());
+    dispatch(fetchStyleData());
   }, [dispatch]);
+  const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
 
   if (loading) return <p>Loading section 3...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
-
+  if (styleLoading)
+    return <p className="text-center text-gray-500">Style Loading...</p>;
+  if (styleError)
+    return <p className="text-center text-red-500">Style Error: {styleError}</p>;
+  
   return (
     <section
       ref={ref}
-      className="relative py-6 px-6 bg-cover bg-center text-center text-secondary border-gray-200 border-b-2"
+      className={`relative py-6 px-6 bg-cover bg-center text-center ${styles["text-secondary"]} ${styles["border-primary"]}`}
       style={{ backgroundImage: "url('/images/background.svg')" }}
     >
-      <h2 className="font-bold text-primary">Our Impact</h2>
+      <h2 className={`font-bold ${styles["text-primary"]}`}>Our Impact</h2>
 
       <div className="flex flex-wrap justify-center gap-8 mt-8">
         <motion.div

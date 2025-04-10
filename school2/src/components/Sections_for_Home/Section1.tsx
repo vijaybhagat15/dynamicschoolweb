@@ -4,6 +4,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSection1Slides } from "../../redux/slices/section1Slice";
 import { AppDispatch, RootState } from "../../redux/store";
+import { fetchStyleData } from "../../redux/slices/styleSlice";
 
 
 const Carousel = () => {
@@ -34,11 +35,19 @@ const Carousel = () => {
 
   useEffect(() => {
     dispatch(fetchSection1Slides());
+    dispatch(fetchStyleData());
+
   }, [dispatch]);
+  const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
+
   if (!slides || slides.length === 0 || !slides[index]) return null;
   if (loading) return <div className="text-center py-10">Loading slides...</div>;
   if (error) return <div className="text-center py-10 text-red-500">Error: {error}</div>;
-
+  if (styleLoading)
+    return <p className="text-center text-gray-500">Style Loading...</p>;
+  if (styleError)
+    return <p className="text-center text-red-500">Style Error: {styleError}</p>;
+  
   return (
     <div className="relative w-full h-[600px] md:h-[400px] lg:h-[500px] overflow-hidden">
 <AnimatePresence mode="wait">
@@ -62,7 +71,7 @@ const Carousel = () => {
       <p className="mt-6 text-xl md:text-xl font-medium leading-relaxed">
         {slides[index].description}
       </p>
-      <button className="mt-8 bg-button font-semibold px-4 py-2 rounded-xl text-sm shadow-md transition-transform transform hover:scale-105">
+      <button className={`mt-8 ${styles["bg-button"]} font-semibold px-4 py-2 rounded-xl text-sm shadow-md transition-transform transform hover:scale-105`}>
         Learn More
       </button>
     </div>

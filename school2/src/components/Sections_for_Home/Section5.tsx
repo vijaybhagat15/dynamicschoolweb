@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSection5Data } from "../../redux/slices/section5Slice";
 import { RootState, AppDispatch } from "../../redux/store";
+import { fetchStyleData } from "../../redux/slices/styleSlice";
 
 const Section5 = () => {
   const { ref, inView: isInView } = useInView({ triggerOnce: false, threshold: 0.2 });
@@ -15,13 +16,19 @@ const Section5 = () => {
 
   useEffect(() => {
     dispatch(fetchSection5Data());
+    dispatch(fetchStyleData());
   }, [dispatch]);
+  const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
 
   if (loading) return <p>Loading values...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
-
+  if (styleLoading)
+    return <p className="text-center text-gray-500">Style Loading...</p>;
+  if (styleError)
+    return <p className="text-center text-red-500">Style Error: {styleError}</p>;
+  
   return (
-    <section ref={ref} className="relative py-6 text-secondary border-gray-200 border-b-2">
+    <section ref={ref} className={`relative py-6 ${styles["text-secondary"]} ${styles["border-primary"]}`}>
       {/* Background SVG */}
       <div
         className="absolute inset-0 bg-no-repeat bg-center bg-contain"
@@ -30,7 +37,7 @@ const Section5 = () => {
 
       <div className="relative text-center">
         <motion.h2
-          className="text-3xl font-bold text-primary"
+          className={`text-3xl font-bold ${styles["text-primary"]}`}
           initial={{ opacity: 0, y: -50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -42,7 +49,7 @@ const Section5 = () => {
           {values.map((value, index) => (
             <motion.div
               key={index}
-              className="w-64 p-6 text-center shadow-lg rounded-xl bg-secondary"
+              className={`w-64 p-6 text-center shadow-lg rounded-xl ${styles["bg-secondary"]}`}
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.2 }}
@@ -53,7 +60,7 @@ const Section5 = () => {
               >
                 {value.icon}
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-primary">
+              <h3 className={`mt-4 text-xl font-semibold ${styles["text-primary"]}`}>
                 {value.title}
               </h3>
               <p className="mt-2">{value.description}</p>
