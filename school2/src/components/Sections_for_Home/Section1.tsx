@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,14 +12,16 @@ const Carousel = () => {
   const [index, setIndex] = useState(0);
   const [loaderWidth, setLoaderWidth] = useState(0);
   const { slides, loading, error } = useSelector((state: RootState) => state.section1);
+  const nextSlide = useCallback(() => {setIndex((prev) => (prev + 1) % slides.length);}, [slides.length]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
     }, 6000);
-
+  
     return () => clearInterval(interval);
-  }, [index, slides.length]);
+  }, [nextSlide]); // ✅ clean and complete
+  
 
   useEffect(() => {
     setLoaderWidth(0);
@@ -29,8 +31,7 @@ const Carousel = () => {
     return () => clearInterval(loaderInterval);
   }, [index]);
 
-  const nextSlide = () => setIndex((prev) => (prev + 1) % slides.length);
-  const prevSlide = () => setIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    const prevSlide = () => setIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
