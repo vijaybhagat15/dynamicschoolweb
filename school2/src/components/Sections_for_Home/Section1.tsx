@@ -37,7 +37,6 @@ const Carousel = () => {
   useEffect(() => {
     dispatch(fetchSection1Slides());
     dispatch(fetchStyleData());
-
   }, [dispatch]);
   const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
 
