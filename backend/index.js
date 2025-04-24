@@ -15,7 +15,7 @@ import headerRoute from "./routes/header.js";
 import footerRoute from "./routes/footer.js";
 
 const app = express();
-const port = 8000;
+const port = 5000;
 
 app.use(cors());
 app.use("/", stylesRoute); // Use the route

@@ -1,34 +1,66 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { BASE_URL } from "../url";
 
-// Define the type for header data
+// Define types for complex data
+interface Logo {
+  url: string;
+  altText: string;
+}
+
+interface SubMenuItem {
+  title: string;
+  link: string;
+}
+
+interface NavigationItem {
+  title: string;
+  link: string;
+  subMenu: SubMenuItem[];
+  _id: string;
+}
+
+
+interface SocialLink {
+  platform: string;
+  url: string;
+  _id: string;
+}
+
 interface HeaderState {
-  logo: string;
+  logo: Logo | null;
   name: string;
+  navigation: NavigationItem[];
+  socialLinks: SocialLink[];
+  customHtml: string;
   loading: boolean;
   error: string | null;
 }
 
 // Initial state
 const initialState: HeaderState = {
-  logo: "",
+  logo: null,
   name: "",
+  navigation: [],
+  socialLinks: [],
+  customHtml: "",
   loading: false,
   error: null,
 };
 
 // Async thunk to fetch header data
-export const fetchHeader = createAsyncThunk("header/fetchHeader", async (_, { rejectWithValue }) => {
+export const fetchHeader = createAsyncThunk(
+  "header/fetchHeader",
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${BASE_URL}/header`);
-      return response.data.header;
+      const response = await axios.get(`http://localhost:8000/api/v1/header/get-header/680882e5ad3d2f2fce474a05`);
+      return response.data.data; // Use 'data' from response
     } catch (error) {
-      const err = error as AxiosError; // Explicitly cast the error
+      const err = error as AxiosError;
       return rejectWithValue(err.response?.data || "Failed to fetch header");
     }
-  });
+  }
+);
 
 // Create slice
 const headerSlice = createSlice({
@@ -45,6 +77,9 @@ const headerSlice = createSlice({
         state.loading = false;
         state.logo = action.payload.logo;
         state.name = action.payload.name;
+        state.navigation = action.payload.navigation;
+        state.socialLinks = action.payload.socialLinks;
+        state.customHtml = action.payload.customHtml;
       })
       .addCase(fetchHeader.rejected, (state, action) => {
         state.loading = false;

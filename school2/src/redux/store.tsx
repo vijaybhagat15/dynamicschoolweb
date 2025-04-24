@@ -12,6 +12,7 @@ import section5Reducer from "./slices/section5Slice";
 import section6Reducer from "./slices/section6Slice";
 import headerReducer from "./slices/headerSlice";
 import footerReducer from "./slices/footerSlice";
+import websiteReducer from "./slices/websiteSlice";
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,8 @@ export const store = configureStore({
     section6:section6Reducer,
     header: headerReducer,
     footer: footerReducer,
+    website: websiteReducer,
+
   },
 });
 

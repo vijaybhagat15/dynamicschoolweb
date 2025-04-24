@@ -9,85 +9,114 @@ import {
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store"; // Adjust path if needed
-import { fetchFooter } from "../redux/slices/footerSlice";
+import { fetchFooter  } from "../redux/slices/footerSlice";
 import { fetchStyleData } from "../redux/slices/styleSlice";
+import { fetchSchoolDetails } from "../redux/slices/schoolSlice";
 
-// Icon mapping for social platforms
-const iconMap: Record<string, React.ReactNode> = {
-  facebook: <FaFacebook className="w-6 h-6" />,
-  instagram: <FaInstagram className="w-6 h-6" />,
-  linkedin: <FaLinkedin className="w-6 h-6" />,
-  twitter: <FaTwitter className="w-6 h-6" />,
-  youtube: <FaYoutube className="w-6 h-6" />,
-  vimeo: <FaVimeoV className="w-6 h-6" />,
+const iconMap = {
+  "face book": <FaFacebook />,
+  "insta": <FaInstagram />,
+  "libkdin": <FaLinkedin />
+};
+
+const hoverColorMap = {
+  "face book": "hover:text-blue-600",
+  "insta": "hover:text-pink-500",
+  "libkdin": "hover:text-blue-800"
 };
 
 const Footer = () => {
   const dispatch = useDispatch<AppDispatch>();
-
   // Extracting footer state from Redux
-  const { campuses, affiliatedPrograms, socialLinks, loading, error } = useSelector(
-    (state: RootState) => state.footer
-  );
+  const { footer} = useSelector((state: RootState) => state.footer);
+  const { school} = useSelector((state: RootState) => state.school);
+  const {navigation} = useSelector((state: RootState) => state.header);
+
 
   useEffect(() => {
+    dispatch(fetchSchoolDetails("68093bd5b930796b48509591"));
     dispatch(fetchFooter());
     dispatch(fetchStyleData());
   }, [dispatch]);
   const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
-
-  if (loading) return <p className="text-center py-4">Loading footer...</p>;
-  if (error) return <p className="text-center py-4 text-red-500">Error: {error}</p>;
   if (styleLoading)
     return <p className="text-center text-gray-500">Style Loading...</p>;
   if (styleError)
     return <p className="text-center text-red-500">Style Error: {styleError}</p>;
   
   return (
-    <footer className={`${styles["bg-footer"]} text-white py-12 px-6 md:px-20`}>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Campus Sections */}
-        {campuses.map((campus, idx) => (
-          <div className="space-y-2" key={idx}>
-            <h3 className="text-lg font-semibold pb-1 underline ">{campus.title}</h3>
-            <p className="text-sm text-gray-300">{campus.subtitle}</p>
-            <p className="mt-2">{campus.addressLine1}</p>
-            <p>{campus.addressLine2}</p>
-            <p className="mt-2 font-semibold">{campus.phone}</p>
-          </div>
-        ))}
-
-        {/* Affiliated Programs */}
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold underline pb-1 ">AFFILIATED PROGRAMS</h3>
-          <ul className="mt-2 space-y-2 text-blue-400">
-            {affiliatedPrograms.map((program, idx) => (
-              <li key={idx}>
-                <a href={program.link} className="hover:underline">{program.name}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Social Media */}
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold underline pb-1 ">ACCREDITATION & MEMBERSHIPS</h3>
-
-          <h3 className="mt-6 text-lg font-semibold">Like. Follow. Friend.</h3>
-          <p className="text-gray-300">@crestviewacademy</p>
-          <div className="mt-2 flex space-x-4">
-            {socialLinks.map(({ name, hoverColor }, idx) => (
-              <div
-                key={idx}
-                className={`cursor-pointer transition-transform transform hover:scale-110 ${hoverColor}`}
-              >
-                {iconMap[name]}
-              </div>
-            ))}
-          </div>
-        </div>
+    <footer className={`${styles["bg-footer"]} text-white py-5 px-6 md:px-5`}>
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    
+    {/* Logo and Academy Info */}
+    <div className="text-center space-y-2">
+      <div className="flex justify-center">
+        <img
+          src={footer?.logo}
+          alt="Footer Logo"
+          className="h-32 object-contain"
+        />
       </div>
-    </footer>
+      <h2 className="text-2xl font-bold">{footer?.name}</h2>
+    </div>
+
+    {/* Contact Details */}
+    <div className="space-y-1">
+      <h3 className="text-xl font-semibold pb-1 underline">Contact Details</h3>
+      <p className="text-base">{school?.email}</p>
+      <p className="text-base">{school?.phone}</p>
+      <p className="text-base">{school?.street}, {school?.location}, {school?.zipcode}</p>
+      <p className="text-base">{school?.state}, {school?.country}</p>
+      <p className="text-base">{footer?.openingHours}</p>
+    </div>
+
+    {/* Navigations */}
+    <div className="space-y-2">
+      <h3 className="text-xl font-semibold underline pb-1">Navigations</h3>
+      <ul className="space-y-2 text-blue-400 text-base">
+        {navigation.map((item) => (
+          <li key={item?.title}>
+            <a href={item.link} className="hover:underline">{item.title}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Social Media */}
+    <div className="space-y-2">
+      <h3 className="text-xl font-semibold underline pb-1">ACCREDITATION & MEMBERSHIPS</h3>
+
+      <h3 className="mt-6 text-lg font-semibold">Like. Follow. Friend.</h3>
+      <div className="flex space-x-4">
+        {footer?.socialLinks.map(({ platform, url }, idx) => (
+          <a
+            key={idx}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`cursor-pointer text-2xl transition-transform transform hover:scale-110 ${hoverColorMap[platform]}`}
+          >
+            {iconMap[platform]}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  {/* Footer Bottom */}
+  <div className="w-64 sm:w-96 mx-auto text-center space-y-1 mt-2">
+    <p className="text-base text-gray-300">{footer?.description}</p>
+    <p className="text-base text-gray-400">
+      <a href="/privacy-policy" className="underline hover:text-white">
+        {footer?.Privacy_Policy}
+      </a>
+    </p>
+    <p className="text-base text-gray-500">
+      {footer?.copyright}
+    </p>
+  </div>
+</footer>
+
   );
 };
 

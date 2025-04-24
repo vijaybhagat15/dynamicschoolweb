@@ -13,8 +13,11 @@ const Header = () => {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   // Select state from the store
-  const { logo, name, loading, error } = useSelector((state: RootState) => state.header);
+  const { logo, name, navigation, loading, error } = useSelector((state: RootState) => state.header);
   // Fetch data when component mounts
+
+
+
   useEffect(() => {
     dispatch(fetchHeader());
     dispatch(fetchStyleData());
@@ -33,29 +36,23 @@ const Header = () => {
     <header className={`flex items-center justify-between px-4 md:px-6 ${styles["bg-primary"]} shadow-md w-full sticky top-0 z-10 h-16 md:h-20`}>
       {/* Logo and Name */}
       <Link to="/" className="flex items-center space-x-2">
-        <img src={logo|| 'logo'} alt="NovaStar Academy" className="h-10 md:h-14" />
+        <img src={`${logo?.url}`|| 'logo'}
+         alt={`${logo?.altText}`|| 'logo'} className="h-10 md:h-14" />
         <span className={`font-bold text-base ${styles["text-primary"]} sm:${styles["text-primary"]} sm:text-2xl`}>
         {name}
-        </span>
+        </span> 
       </Link>
       {/* Desktop Navigation */}
       <nav className={`hidden lg:flex items-center space-x-6 ${styles["text-secondary"]} font-semibold pr-10`}>
-        {[ 
-          { name: "Home", path: "/" },
-          { name: "Academics", path: "/Academics" },
-          { name: "About", path: "/About" },
-          { name: "Contact", path: "/Contact" },
-          { name: "Schools", path: "/Schools" },
-          { name: "News", path: "/News" },
-        ].map((item) => (
+        {navigation.map((item) => (
           <Link
-            key={item.name}
-            to={item.path}
+            key={item.title}
+            to={item.link}
             className={`hover:scale-110 transition ${
-              location.pathname === item.path ? "underline" : ""
+              location.pathname === item.link ? "underline" : ""
             }`}
           >
-            {item.name}
+            {item.title}
           </Link>
         ))}
       </nav>

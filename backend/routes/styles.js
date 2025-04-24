@@ -10,7 +10,7 @@ router.get("/", (req, res) => {
             "bg-button": "bg-teal-700 hover:bg-teal-900 text-white",
             "text-primary": "text-teal-900 text-2xl font-bold",
             "text-secondary": "text-teal-700 text-lg",
-            "bg-footer": "bg-teal-900",
+            "bg-footer": "bg-teal-900 text-white",
             "border-primary": "border-gray-200 border-b-2",
             "border-secondary": "border-teal-600 border-2"
           }

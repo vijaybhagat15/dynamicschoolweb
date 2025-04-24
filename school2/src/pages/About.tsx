@@ -5,32 +5,37 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { fetchAboutData } from "../redux/slices/AboutSlice";
 import { fetchStyleData } from "../redux/slices/styleSlice";
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { fetchWebsite } from '../redux/slices/websiteSlice';
 
 const About = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { website, loading, error } = useAppSelector((state) => state.website);
 
   useEffect(() => {
     dispatch(fetchStyleData());
     dispatch(fetchAboutData());
+    dispatch(fetchWebsite('680a1c0c53493f221d63304c'));
+
   }, [dispatch]);
 
   const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
-
-  const {
-    facultyMembers,
-    text,
-    loading: aboutLoading,
-    error: aboutError,
-  } = useSelector((state: RootState) => state.about);
-
+const facultyMembers= [ 
+  { id: 1, image: "images/About/Principal.jpg", name: "Dr. Emily Carter", subject: "Principal" },
+  { id: 2, image: "images/About/Mathematics.jpg", name: "Mr. James Wilson", subject: "Mathematics" },
+  { id: 3, image: "images/About/Science.jpg", name: "Ms. Olivia Roberts", subject: "Science" },
+];
   const [ref, inView] = useInView({ triggerOnce: false, threshold: 0.1 });
 
-  if (styleLoading || aboutLoading)
+  if (styleLoading || loading)
     return <p className="text-center text-gray-500">Loading...</p>;
   if (styleError)
     return <p className="text-center text-red-500">Style Error: {styleError}</p>;
-  if (aboutError)
-    return <p className="text-center text-red-500">About Error: {aboutError}</p>;
+  if (error)
+    return <p className="text-center text-red-500">About Error: {error}</p>;
+  if (loading) return <p>Loading website data...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!website) return <p>No website data found.</p>;
 
   return (
     <div className={`border-y-2 border-white ${styles["text-secondary"]}`}>
@@ -44,10 +49,7 @@ const About = () => {
           >
             <h2 className={`${styles["text-primary"]}`}>Our Journey</h2>
             <p className={`mt-6 text-center md:text-left ${styles["text-secondary"]} leading-relaxed`}>
-              {text?.Journey1 || "Loading..."}
-            </p>
-            <p className={`mt-4 text-center md:text-left ${styles["text-secondary"]} leading-relaxed`}>
-              {text?.Journey2 || "Loading..."}
+              {website.modules.about.data.Your_mission || "Loading..."}
             </p>
           </motion.div>
 
@@ -59,7 +61,7 @@ const About = () => {
             className="flex justify-center bg-teal-500 rounded-3xl p-[1px]"
           >
             <img
-              src={text?.headimg || "Loading..."}
+              src={website.modules.about.data.mission_img || "Loading..."}
               alt="Our Campus"
               className="rounded-3xl shadow-lg"
             />
@@ -76,7 +78,7 @@ const About = () => {
         >
           <h2 className={`${styles["text-primary"]}`}>Our Mission</h2>
           <p className={`mt-6 ${styles["text-secondary"]} leading-relaxed max-w-3xl mx-auto`}>
-            {text?.Mission || "Loading..."}
+            {website.modules.about.data.journey|| "Loading..."}
           </p>
         </motion.div>
 
@@ -85,31 +87,60 @@ const About = () => {
           <div className="container mx-auto text-center">
             <h2 className={`${styles["text-primary"]} mb-8`}>Meet Our Faculty</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-              {facultyMembers?.length > 0 ? (
-                facultyMembers.map((member, index) => (
-                  <motion.div
-                    key={member.id}
+              <div>
+              <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6, delay: index * 0.2 }}
                     className="bg-white p-4 rounded-lg shadow-lg border-2 border-transparent hover:scale-105 transition-transform"
                   >
                     <img
-                      src={member.image}
-                      alt={member.name}
+                      src={website.modules.about.data.Principal_img}
+                      alt={website.modules.about.data.Principal}
                       className="w-full h-64 object-cover rounded-md mb-4 border-2 border-teal-500"
                     />
                     <h3 className={`mb-2 ${styles["text-primary"]}`}>
-                      {member.name}
-                    </h3>
+                    {website.modules.about.data.Principal}                    </h3>
                     <p className={`font-sans ${styles["text-secondary"]}`}>
-                      {member.subject}
+                    Principal
                     </p>
                   </motion.div>
-                ))
-              ) : (
-                <p className="text-gray-500">No faculty members available.</p>
-              )}
+              </div>
+              <div>
+              <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-white p-4 rounded-lg shadow-lg border-2 border-transparent hover:scale-105 transition-transform"
+                  >
+                    <img
+                      src={website.modules.about.data.HOD_img}
+                      className="w-full h-64 object-cover rounded-md mb-4 border-2 border-teal-500"
+                    />
+                    <h3 className={`mb-2 ${styles["text-primary"]}`}>
+                    {website.modules.about.data.HOD}
+                    </h3>
+                    <p className={`font-sans ${styles["text-secondary"]}`}>
+                     HOD
+                    </p>
+                  </motion.div>
+              </div>
+              <div>
+              <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-white p-4 rounded-lg shadow-lg border-2 border-transparent hover:scale-105 transition-transform"
+                  >
+                    <img
+                      src={website.modules.about.data.President_img}
+                      alt={website.modules.about.data.President}
+                      className="w-full h-64 object-cover rounded-md mb-4 border-2 border-teal-500"
+                    />
+                    <h3 className={`mb-2 ${styles["text-primary"]}`}>
+                    {website.modules.about.data.President}                    </h3>
+                    <p className={`font-sans ${styles["text-secondary"]}`}>
+                    President
+                    </p>
+                  </motion.div>
+              </div>
             </div>
           </div>
         </div>

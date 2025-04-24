@@ -1,63 +1,54 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
-import { BASE_URL } from "../url";
-
-// Define types
-interface Campus {
-  title: string;
-  subtitle: string;
-  addressLine1: string;
-  addressLine2: string;
-  phone: string;
-}
-
-interface AffiliatedProgram {
-  name: string;
-  link: string;
-}
+// src/redux/slices/footerSlice.ts
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 interface SocialLink {
+  platform: string;
+  url: string;
+  _id: string;
+}
+
+interface FooterData {
+  _id: string;
   name: string;
-  hoverColor: string;
+  description: string;
+  logo: string;
+  openingHours: string;
+  copyright: string;
+  Privacy_Policy: string;
+  links: any[]; // Update this when structure is defined
+  socialLinks: SocialLink[];
+  columns: any[]; // Update this when structure is defined
 }
 
 interface FooterState {
-  campusesTitle: string; // Added title for campuses
-  campuses: Campus[];
-  affiliatedProgramsTitle: string; // Added title for affiliated programs
-  affiliatedPrograms: AffiliatedProgram[];
-  socialLinksTitle: string; // Added title for social links
-  socialLinks: SocialLink[];
   loading: boolean;
+  footer: FooterData | null;
   error: string | null;
 }
 
-// Initial state
 const initialState: FooterState = {
-  campusesTitle: "Our Campuses", // Default title
-  campuses: [],
-  affiliatedProgramsTitle: "Affiliated Programs", // Default title
-  affiliatedPrograms: [],
-  socialLinksTitle: "Follow Us", // Default title
-  socialLinks: [],
   loading: false,
+  footer: null,
   error: null,
 };
 
-// Async thunk to fetch footer data
-export const fetchFooter = createAsyncThunk("footer/fetchFooter", async (_, { rejectWithValue }) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/footer`);
-    return response.data.footerData;
-  } catch (error) {
-    const err = error as AxiosError;
-    return rejectWithValue(err.response?.data || "Failed to fetch footer data");
+export const fetchFooter = createAsyncThunk(
+  'footer/fetchFooter',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        'http://localhost:8000/api/v1/footer/get-footer/680916e6273e239f4a9841c4'
+      );
+      return response.data.data as FooterData;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to fetch footer');
+    }
   }
-});
+);
 
-// Create slice
 const footerSlice = createSlice({
-  name: "footer",
+  name: 'footer',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -68,9 +59,7 @@ const footerSlice = createSlice({
       })
       .addCase(fetchFooter.fulfilled, (state, action) => {
         state.loading = false;
-        state.campuses = action.payload.campuses;
-        state.affiliatedPrograms = action.payload.affiliatedPrograms;
-        state.socialLinks = action.payload.socialLinks;
+        state.footer = action.payload;
       })
       .addCase(fetchFooter.rejected, (state, action) => {
         state.loading = false;

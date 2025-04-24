@@ -1,90 +1,46 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSchoolData } from "../redux/slices/schoolSlice";
+import { fetchSchoolDetails } from "../redux/slices/schoolSlice";
 import { AppDispatch, RootState } from "../redux/store";
 import { fetchStyleData } from "../redux/slices/styleSlice";
 import { fetchHeader } from "../redux/slices/headerSlice";
 
-type Region = "Bangalore" | "Mumbai" | "Delhi"; // ✅ added region type
-
 const Schools = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { schoolsData, loading, error } = useSelector((state: RootState) => state.school);
-  const { name} = useSelector((state: RootState) => state.header);
+  const { school, loading, error } = useSelector((state: RootState) => state.school);
 
-  const [selectedRegion, setSelectedRegion] = useState<Region>("Bangalore"); // ✅ use defined type
 
   useEffect(() => {
-    dispatch(fetchSchoolData());
+    dispatch(fetchSchoolDetails("68093bd5b930796b48509591"));
     dispatch(fetchStyleData());
     dispatch(fetchHeader());
 
   }, [dispatch]);
-  const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
-
   if (loading) return <p>Loading school data...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
-  if (!schoolsData) return null;
-  if (styleLoading)
-    return <p className="text-center text-gray-500">Style Loading...</p>;
-  if (styleError)
-    return <p className="text-center text-red-500">Style Error: {styleError}</p>;
-  
+  if (!school) return null;
   return (
-    <div className="py-10">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header Section */}
-        <motion.div 
-          className={`${styles["bg-secondary"]} ${styles["text-primary"]} p-6 rounded-lg mb-6 text-center`}
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className={`${styles["text-primary"]}`}>{`Join ${name} Today`}</h2>
-          <p className="mt-2 text-lg">Empowering students with quality education from primary to senior secondary level across India.</p>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            className={`mt-4 ${styles["bg-primary"]} ${styles["text-secondary"]} px-6 py-2 rounded-full`}
-          >
-            Enroll Now
-          </motion.button>
-        </motion.div>
-
-        {/* Region Selection Buttons */}
-        <div className="flex justify-center space-x-6 mb-6">
-          {Object.keys(schoolsData).map((region) => (
-            <motion.button
-              key={region}
-              className={`px-4 py-2 rounded-full ${
-                selectedRegion === region ? `${styles["text-primary"]} text-base ${styles["bg-secondary"]}` : `${styles["text-secondary"]} text-base ${styles["bg-primary"]} border-[1px] ${styles["border-secondary"]} `
-              }`}
-              onClick={() => setSelectedRegion(region as Region)}
-              whileHover={{ scale: 1.1 }}
-            >
-              {region}
-            </motion.button>
-          ))}
-        </div>
-
-        {/* School List */}
-        <motion.div
-          className="grid md:grid-cols-3 gap-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.8 } }}
-        >
-          {schoolsData[selectedRegion].map((school, index) => (
-            <motion.div
-              key={index}
-              className={`flex flex-col items-center ${styles["bg-primary"]} p-4 rounded-lg shadow-md`}
-              whileHover={{ scale: 1.05 }}
-            >
-              <img src={school.image} alt={school.name} className="h-64 w-64 rounded-lg" />
-              <h3 className={`${styles["text-secondary"]} mt-2`}>{school.name}</h3>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+    <div className="p-6 max-w-4xl mx-auto bg-white rounded-xl shadow-md space-y-4">
+      <h1 className="text-2xl font-bold text-blue-900">{school.schoolName}</h1>
+      <p><strong>Type:</strong> {school.schoolType}</p>
+      <p><strong>Affiliation:</strong> {school.affiliation}</p>
+      <p><strong>Year Established:</strong> {new Date(school.year).toDateString()}</p>
+      <p><strong>Email:</strong> {school.email}</p>
+      <p><strong>Phone:</strong> {school.phone}</p>
+      <p><strong>Alternate Phone:</strong> {school.alternatePhone}</p>
+      <p><strong>Website:</strong> <a href={school.schoolurl} className="text-blue-500" target="_blank" rel="noreferrer">{school.schoolurl}</a></p>
+      <p><strong>Address:</strong> {school.street}, {school.location}, {school.state} - {school.zipcode}, {school.country}</p>
+      <p><strong>Principal Name:</strong> {school.principalName}</p>
+      <p><strong>Principal Email:</strong> {school.principalEmail}</p>
+      <p><strong>Principal Phone:</strong> {school.principalPhone}</p>
+      <p><strong>LinkedIn Profile:</strong> <a href={school.linkedinProfile} className="text-blue-500" target="_blank" rel="noreferrer">{school.linkedinProfile}</a></p>
+      <p><strong>Description:</strong></p>
+      <p className="whitespace-pre-line">{school.description}</p>
+      <p><strong>Total Students:</strong> {school.totalStudents}</p>
+      <p><strong>Total Faculty:</strong> {school.totalFaculty}</p>
+      <p><strong>Student-Faculty Ratio:</strong> {school.ratio}:1</p>
+      <p><strong>Created At:</strong> {new Date(school.createdAt).toLocaleString()}</p>
+      <p><strong>Last Updated:</strong> {new Date(school.updatedAt).toLocaleString()}</p>
     </div>
   );
 };

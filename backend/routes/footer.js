@@ -6,11 +6,12 @@ router.get("/footer", (req, res) => {
     res.send({footerData:{
         campuses: [
           {
-            title: "MIDDLE & UPPER SCHOOL",
+            title: "cobtact details",
             subtitle: "(Grades 7-12)",
             addressLine1: "1200 aaaa Street",
             addressLine2: "Mountain View, CA 45624",
             phone: "000-111-2223",
+            Opening_Hours:" 9AM - 5PM"
           },
           {
             title: "LOWER SCHOOL",
