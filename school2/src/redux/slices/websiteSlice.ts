@@ -13,6 +13,17 @@ interface ContactInfo {
   phone: string;
   address: string;
 }
+interface HeroData {
+  Slide1_title: string;
+  Subtitle1: string;
+  img1: string;
+  Slide2_title: string;
+  Subtitle2: string;
+  img2: string;
+  Slide3_title: string;
+  Subtitle3: string;
+  img3: string;
+}
 
 interface AboutData {
   Your_mission: string;
@@ -34,7 +45,7 @@ interface ContactData {
 }
 
 interface Modules {
-  hero: { enabled: boolean };
+  hero: { enabled: boolean; data: HeroData };
   about: { enabled: boolean; data: AboutData };
   courses: { enabled: boolean };
   events: { enabled: boolean };
@@ -49,6 +60,8 @@ export interface WebsiteData {
   _id: string;
   domainName: string;
   schoolId: string;
+  footerId: string;
+    headerId: string;
   name: string;
   status: string;
   metaData: MetaData;
@@ -105,5 +118,4 @@ const websiteSlice = createSlice({
       });
   },
 });
-
 export default websiteSlice.reducer;

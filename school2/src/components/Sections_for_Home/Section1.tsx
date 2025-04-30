@@ -2,17 +2,36 @@ import { useState, useEffect,useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSection1Slides } from "../../redux/slices/section1Slice";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchStyleData } from "../../redux/slices/styleSlice";
-
-
+import { useAppSelector } from '../../redux/hooks';
 const Carousel = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { website, loading, error } = useAppSelector((state) => state.website);
 
+  useEffect(() => {
+    dispatch(fetchStyleData());
+  }, [dispatch]);
   const [index, setIndex] = useState(0);
   const [loaderWidth, setLoaderWidth] = useState(0);
-  const { slides, loading, error } = useSelector((state: RootState) => state.section1);
-  const nextSlide = useCallback(() => {setIndex((prev) => (prev + 1) % slides.length);}, [slides.length]);
+  const slides=[
+    {
+      image: website?.modules.hero.data?.img1,
+      title: website?.modules.hero.data?.Slide1_title,
+      description: website?.modules.hero.data?.Subtitle1,
+    },
+    {
+      image: website?.modules.hero.data?.img2,
+      title: website?.modules.hero.data?.Slide2_title,
+      description: website?.modules.hero.data?.Subtitle2,
+    },
+    {
+      image: website?.modules.hero.data?.img3,
+      title: website?.modules.hero.data?.Slide3_title,
+      description: website?.modules.hero.data?.Subtitle3,
+    },
+  ];
+    const nextSlide = useCallback(() => {setIndex((prev) => (prev + 1) % slides.length);}, [slides.length]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -32,10 +51,7 @@ const Carousel = () => {
   }, [index]);
 
     const prevSlide = () => setIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  const dispatch = useDispatch<AppDispatch>();
-
   useEffect(() => {
-    dispatch(fetchSection1Slides());
     dispatch(fetchStyleData());
   }, [dispatch]);
   const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
@@ -97,7 +113,6 @@ const Carousel = () => {
           ></button>
         ))}
       </div>
-
       {/* Loader UI */}
       <div className="absolute bottom-0 left-0 w-full bg-black border-t-2 border-gray-800">
         <div className="relative mx-auto h-2 w-full bg-gray-600">

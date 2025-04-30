@@ -1,10 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import styleReducer from "./slices/styleSlice";
-import AboutReducer from "./slices/AboutSlice";
 import academicsReducer from "./slices/academicsSlice";
 import contactReducer from "./slices/contactSlice";
 import schoolReducer from "./slices/schoolSlice";
-import section1Reducer from "./slices/section1Slice";
 import section2Reducer from "./slices/section2Slice";
 import section3Reducer from "./slices/section3Slice";
 import section4Reducer from "./slices/section4Slice";
@@ -17,11 +15,9 @@ import websiteReducer from "./slices/websiteSlice";
 export const store = configureStore({
   reducer: {
     style: styleReducer,
-    about: AboutReducer,
     academics: academicsReducer,
     contact: contactReducer,
     school: schoolReducer,
-    section1: section1Reducer,
     section2: section2Reducer,
     section3: section3Reducer,
     section4:section4Reducer, 

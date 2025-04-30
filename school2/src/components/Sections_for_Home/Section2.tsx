@@ -11,6 +11,7 @@ const Section2 = () => {
   const [hovered, setHovered] = useState<number | null>(null);
   const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.2 });
   const dispatch = useDispatch<AppDispatch>();
+  const { school} = useSelector((state: RootState) => state.school);
 
   const { sections, loading, error } = useSelector(
     (state: RootState) => state.section2
@@ -28,7 +29,7 @@ const Section2 = () => {
     return <p className="text-center text-gray-500">Style Loading...</p>;
   if (styleError)
     return <p className="text-center text-red-500">Style Error: {styleError}</p>;
-  
+
   return (
     <section
       ref={ref}

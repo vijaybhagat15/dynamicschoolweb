@@ -1,21 +1,11 @@
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { fetchWebsite } from '../../redux/slices/websiteSlice';
+import {  useAppSelector } from '../../redux/hooks';
 
 const Section1: React.FC = () => {
-    const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.2 });
-  const dispatch = useDispatch<AppDispatch>();
+  const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.2 });
   const { website, loading, error } = useAppSelector((state) => state.website);
-
-  useEffect(() => {
-    dispatch(fetchWebsite('680a1c0c53493f221d63304c'));
-
-  }, [dispatch]);
-if (error)
+  if (error)
     return <p className="text-center text-red-500">About Error: {error}</p>;
   if (loading) return <p>Loading website data...</p>;
   if (error) return <p>Error: {error}</p>;

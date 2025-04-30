@@ -35,10 +35,10 @@ const initialState: FooterState = {
 
 export const fetchFooter = createAsyncThunk(
   'footer/fetchFooter',
-  async (_, thunkAPI) => {
+  async (id:string, thunkAPI) => {
     try {
       const response = await axios.get(
-        'http://localhost:8000/api/v1/footer/get-footer/680916e6273e239f4a9841c4'
+        `http://localhost:8000/api/v1/footer/get-footer/${id}`
       );
       return response.data.data as FooterData;
     } catch (error: any) {

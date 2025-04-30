@@ -3,28 +3,19 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import { fetchAboutData } from "../redux/slices/AboutSlice";
 import { fetchStyleData } from "../redux/slices/styleSlice";
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { fetchWebsite } from '../redux/slices/websiteSlice';
+import { useAppSelector } from '../redux/hooks';
 
 const About = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { website, loading, error } = useAppSelector((state) => state.website);
-
+  
   useEffect(() => {
     dispatch(fetchStyleData());
-    dispatch(fetchAboutData());
-    dispatch(fetchWebsite('680a1c0c53493f221d63304c'));
-
   }, [dispatch]);
 
   const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
-const facultyMembers= [ 
-  { id: 1, image: "images/About/Principal.jpg", name: "Dr. Emily Carter", subject: "Principal" },
-  { id: 2, image: "images/About/Mathematics.jpg", name: "Mr. James Wilson", subject: "Mathematics" },
-  { id: 3, image: "images/About/Science.jpg", name: "Ms. Olivia Roberts", subject: "Science" },
-];
+
   const [ref, inView] = useInView({ triggerOnce: false, threshold: 0.1 });
 
   if (styleLoading || loading)

@@ -2,16 +2,15 @@ import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
-  FaTwitter,
-  FaYoutube,
-  FaVimeoV,
+  // FaTwitter,
+  // FaYoutube,
+  // FaVimeoV,
 } from "react-icons/fa";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store"; // Adjust path if needed
-import { fetchFooter  } from "../redux/slices/footerSlice";
 import { fetchStyleData } from "../redux/slices/styleSlice";
-import { fetchSchoolDetails } from "../redux/slices/schoolSlice";
+import { useAppSelector } from "../redux/hooks";
 
 const iconMap = {
   "face book": <FaFacebook />,
@@ -30,12 +29,8 @@ const Footer = () => {
   // Extracting footer state from Redux
   const { footer} = useSelector((state: RootState) => state.footer);
   const { school} = useSelector((state: RootState) => state.school);
-  const {navigation} = useSelector((state: RootState) => state.header);
-
-
+  const { logo, name, navigation} = useAppSelector((state: RootState) => state.header);
   useEffect(() => {
-    dispatch(fetchSchoolDetails("68093bd5b930796b48509591"));
-    dispatch(fetchFooter());
     dispatch(fetchStyleData());
   }, [dispatch]);
   const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
@@ -51,13 +46,15 @@ const Footer = () => {
     {/* Logo and Academy Info */}
     <div className="text-center space-y-2">
       <div className="flex justify-center">
-        <img
-          src={footer?.logo}
+        <img 
+          //  src='https://school2-omega.vercel.app/logo.png'
+
+          src={logo?.url || "/placeholder-logo.png"}
           alt="Footer Logo"
           className="h-32 object-contain"
         />
       </div>
-      <h2 className="text-2xl font-bold">{footer?.name}</h2>
+      <h2 className="text-2xl font-bold">{name}</h2>
     </div>
 
     {/* Contact Details */}
@@ -105,7 +102,7 @@ const Footer = () => {
 
   {/* Footer Bottom */}
   <div className="w-64 sm:w-96 mx-auto text-center space-y-1 mt-2">
-    <p className="text-base text-gray-300">{footer?.description}</p>
+    {/* <p className="text-base text-gray-300">{footer?.description}</p> */}
     <p className="text-base text-gray-400">
       <a href="/privacy-policy" className="underline hover:text-white">
         {footer?.Privacy_Policy}

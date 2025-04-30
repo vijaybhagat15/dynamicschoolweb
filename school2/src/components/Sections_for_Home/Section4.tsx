@@ -3,23 +3,22 @@ import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSection4Data } from "../../redux/slices/section4Slice";
-import { fetchHeader } from "../../redux/slices/headerSlice"; 
 import { fetchStyleData } from "../../redux/slices/styleSlice";
 
 import { AppDispatch, RootState } from "../../redux/store";
+import { useAppSelector } from "../../redux/hooks";
 
 const Section4 = () => {
   const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.1 });
   const dispatch = useDispatch<AppDispatch>();
 
   const { sections, loading, error } = useSelector((state: RootState) => state.section4);
-  const { logo, name } = useSelector((state: RootState) => state.header);
+  const { logo, name} = useAppSelector((state: RootState) => state.header);
 
   // Fetch data on component mount
   useEffect(() => {
     dispatch(fetchSection4Data());
     dispatch(fetchStyleData());
-    dispatch(fetchHeader());
   }, [dispatch]);
   const { styles, loading: styleLoading, error: styleError } = useSelector((state: RootState) => state.style);
 
@@ -46,7 +45,7 @@ const Section4 = () => {
         className="text-center md:text-left"
       >
         <div className="flex justify-center lg:justify-start mb-4">
-          <img src={logo|| `logo`} alt="10 Years Celebration" className="w-36" />
+          <img src={logo?.url|| `logo`} alt="10 Years Celebration" className="w-36" />
         </div>
         <div className="justify-center">
           <h2 className={`text-2xl mb-4 ${styles["text-primary"]} w-64 mx-auto lg:mx-0`} >At {name}</h2>
