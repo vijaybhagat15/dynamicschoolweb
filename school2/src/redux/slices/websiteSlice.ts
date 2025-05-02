@@ -61,7 +61,8 @@ export interface WebsiteData {
   domainName: string;
   schoolId: string;
   footerId: string;
-    headerId: string;
+  themeId: string;
+  headerId: string;
   name: string;
   status: string;
   metaData: MetaData;

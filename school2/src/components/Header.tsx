@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import MobilenavLinks from "./Mobilenavelinks";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
+
 import { fetchStyleData } from "../redux/slices/styleSlice";
 import { fetchWebsite } from "../redux/slices/websiteSlice";
 import { fetchHeader } from "../redux/slices/headerSlice";
 import { fetchSchoolDetails } from "../redux/slices/schoolSlice";
 import { fetchFooter  } from "../redux/slices/footerSlice";
-
+import { fetchTheme } from '../redux/slices/style1Slice';
 import { AppDispatch, RootState } from "../redux/store";
 import { useAppSelector } from "../redux/hooks";
 
@@ -29,6 +30,7 @@ const Header: React.FC = () => {
   const { styles, loading: styleLoading, error: styleError } = useAppSelector(
     (state: RootState) => state.style
   );
+  const { data, loading, error } = useSelector((state: RootState) => state.style1);
 
   // Fetch website and style data on mount
   useEffect(() => {
@@ -40,9 +42,18 @@ const Header: React.FC = () => {
   useEffect(() => {
     if (website?.headerId) {
       dispatch(fetchHeader(website.headerId));
-      console.log(website?.headerId)
+      // console.log(website?.headerId)
     }
   }, [dispatch, website?.headerId]);
+
+  // Once website data arrives, fetch fetchTheme config
+  useEffect(() => {
+    if (website?.themeId) {
+      dispatch(fetchTheme(website?.themeId));
+
+      console.log(website?.themeId)
+    }
+  }, [dispatch,website?.themeId]);
 
   // Once website data arrives, fetch fetchSchoolDetails config
   useEffect(() => {
@@ -62,13 +73,18 @@ const Header: React.FC = () => {
   // Consolidate loading and error states
   const isLoading = websiteLoading || styleLoading || headerLoading;
   const errorMessage = websiteError || styleError || headerError;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!data) return null;
 
   return (
     <>
       <header
-        className={`flex items-center justify-between px-4 md:px-6 ${
-          styles?.["bg-primary"] || "bg-white"
-        } shadow-md w-full sticky top-0 z-10 h-16 md:h-20`}
+        style={{
+          backgroundColor: data?.headerBackgroundColor || "#ffffff",
+          color: data?.textColor || "#000000",
+        }}
+        className={`flex items-center justify-between px-4 md:px-6 shadow-md w-full sticky top-0 z-10 h-16 md:h-20`}
       >
         {/* Logo and Name */}
         <Link to="/" className="flex items-center space-x-2">
